@@ -1,0 +1,36 @@
+{
+  "name": "express-cors",
+  "version": "0.1.0",
+  "description": "Middleware to control CORS in an Express app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kubide/express-cors.git"
+  },
+  "keywords": [
+    "cors",
+    "express"
+  ],
+  "author": "Kubide <hola@kubide.es> (http://kubide.es)",
+  "contributors": [
+    "Ángel Luis Quesada <angel.quesada@kubide.es> (http://gelito.me)",
+    "Eneko Lakasta <eneko.lakasta@kubide.es>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kubide/express-cors/issues"
+  },
+  "homepage": "https://github.com/Kubide/express-cors#readme",
+  "engines": {
+    "node": ">= 4.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.9.1"
+  },
+  "dependencies": {
+    "lodash": "^4.7.0"
+  }
+}
