@@ -1,6 +1,6 @@
 {
   "name": "cors-express",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Middleware to control CORS in an Express app",
   "main": "index.js",
   "scripts": {
