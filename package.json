@@ -6,13 +6,15 @@
   "scripts": {
     "ncu": "./node_modules/.bin/ncu",
     "dev": "clear && export NODE_ENV=development && npm install && npm update && ./node_modules/.bin/nodemon",
-    "devtest": "clear && export NODE_ENV=development && npm install && ./node_modules/.bin/mocha --reporter spec",
-    "start": "clear && export NODE_ENV=production && npm install && nodemon -e js,json,hbs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "clear && export NODE_ENV=development && npm install && ./node_modules/.bin/mocha --reporter spec",
+    "prepublish": "npm run test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kubide/express-cors.git"
+  },
+  "directories": {
+    "lib": "./lib"
   },
   "keywords": [
     "cors",
@@ -31,10 +33,14 @@
   "engines": {
     "node": ">= 4.4.2"
   },
-  "devDependencies": {
-    "nodemon": "^1.9.1"
-  },
   "dependencies": {
     "lodash": "^4.7.0"
+  },
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3",
+    "nodemon": "^1.7.1",
+    "npm-check-updates": "^2.6.1",
+    "supertest": "^1.1.0"
   }
 }
