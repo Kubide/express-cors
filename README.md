@@ -1,4 +1,4 @@
-# i18n-xlocale
+# cors express
 
 Middleware to control CORS in an Express app
 
