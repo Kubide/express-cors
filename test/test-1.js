@@ -44,7 +44,7 @@ describe('override usage', function () {
         options = {
             options : function(req, res, next){
                 if (req.method == 'OPTIONS') {
-                    res.status(200).end();
+                    res.status(200).json("test data");
                 } else {
                     next();
                 }
@@ -107,6 +107,20 @@ describe('override usage', function () {
     });
 
 
+
+    it('options', function (done) {
+        supertest(app)
+            .options("/")
+            .send()
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+                should.not.exist(err);
+                res.body.should.be.equal("test data");
+                done();
+            });
+    });
 
 
 });

@@ -27,7 +27,7 @@ app.use(cors(options));
 
 ## Options
 
-```json
+```js
 {
 allow : {
     origin: '*',
