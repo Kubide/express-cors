@@ -1,179 +1,72 @@
-# mongoose-slug-generator
+# cors-express
 
-Mongoose plugin for creating slugs based on mongoose schema fields. For example you can create a slug based on a document's title and author's name: _my-post-title-kevin-roosevelt_, or unique slugs based on just the title: _my-post-title-Nyiy4wW9l_.
+Middleware to control CORS in an Express app
 
 ## Installation
 
 The best way to install it is using **npm**
 
 ```sh
-npm install mongoose-slug-generator --save
+npm install cors-express --save
 ```
 
 ## Loading
 
 ```js
-var slug = require('mongoose-slug-generator');
+var cors = require('cors-express');
 ```
 
-## Initialization
+## Initialization and Usage
 
 ```js
-var mongoose = require('mongoose');
-mongoose.plugin(slug);
+var app = express(),
+    options = {};
+
+app.use(cors(options));
 ```
 
-## Usage
+## Options
 
-This plugin is based on the idea of using the **mongoose schema** as the way to check the use of slug fields.
-
-The plugin checks and updates automatically the *slug field* with the correct slug.
-
-### Basic Usage
-
-If you only want to create the slug based on a simple field.
-
-```js
-var mongoose = require('mongoose'),
-    slug = require('mongoose-slug-generator'),
-    mongoose.plugin(slug),
-    Schema = mongoose.Schema,
-    schema = new Schema({
-        title: String,
-        slug: { type: String, slug: "title" }
-});
+```json
+{
+allow : {
+    origin: '*',
+    methods: 'GET,PATCH,PUT,POST,DELETE,HEAD,OPTIONS',
+    headers: 'Content-Type, Authorization, Content-Length, X-Requested-With, X-HTTP-Method-Override'
+},
+expose :{
+    headers : null
+},
+max : {
+    age : null
+},
+options : function(req, res, next){
+    if (req.method == 'OPTIONS') {
+        res.status(200).end();
+    } else {
+        next();
+    }
+},
+specials : {
+    powered : null
+}
 ```
+### Options
 
+This method override the normal use of the "option" method and return OK with seted CORS headers
 
-### Multiple slug fields
+### Specials
 
-You can add as many slug fields as you wish
+#### Powered
 
-```js
-var mongoose = require('mongoose'),
-    slug = require('mongoose-slug-generator'),
-    mongoose.plugin(slug),
-    Schema = mongoose.Schema,
-    schema = new Schema({
-        title: String,
-        subtitle: String,
-        slug: { type: String, slug: "title" },
-        slug2: { type: String, slug: "title" },
-        slug3: { type: String, slug: "subtitle" }
-});
-```
+Can change the "x-powered-by" header. You can use:
 
+* **null** show original header: "Express"
+* **false** doesn't show the header: "Express
+* **string** show your own string
 
-### Multiple fields to create the slug
-
-If you want, you can use more than one field in order to create a new slug field.
-
-```js
-var mongoose = require('mongoose'),
-    slug = require('mongoose-slug-generator'),
-    mongoose.plugin(slug),
-    Schema = mongoose.Schema,
-    schema = new Schema({
-        title: String,
-        subtitle: String,
-        slug: { type: String, slug: ["title", "subtitle"] }
-});
-```
-
-
-### Unique slug field
-
-To create a unique slug field, you must only add add the *unique: true* parameter in the path (also, this way the default mongo unique index gets created)
-
-```js
-var mongoose = require('mongoose'),
-    slug = require('mongoose-slug-generator'),
-    mongoose.plugin(slug),
-    Schema = mongoose.Schema,
-    schema = new Schema({
-        title: String,
-        subtitle: String,
-        slug: { type: String, slug: ["title", "subtitle"], unique: true }
-});
-```
-
-If _unique_ is set, the plugin searches in the mongo database, and if the slug already exists in the collection, it appends to the slug a separator (default: "-") and a random string (generated with the shortid module).
-
-**example random**
-
-```js
-mongoose.model('Resource').create({
-    title: 'Am I wrong, fallin\' in love with you!',
-    subtitle: "tell me am I wrong, well, fallin' in love with you"
-}) // slug -> 'am-i-wrong-fallin-in-love-with-you'
-
-mongoose.model('Resource').create({
-    title: 'Am I wrong, fallin\' in love with you!',
-    subtitle: "tell me am I wrong, well, fallin' in love with you"
-}) // slug -> 'am-i-wrong-fallin-in-love-with-you-Nyiy4wW9l'
-
-mongoose.model('Resource').create({
-    title: 'Am I wrong, fallin\' in love with you!',
-    subtitle: "tell me am I wrong, well, fallin' in love with you"
-}) // slug -> 'am-i-wrong-fallin-in-love-with-you-NJeskEPb5e'
-```
-
-Alternatively you can modify this behaviour and instead of appending a random string, an incremental counter will be used. For that to happen, you must use the parameter *slug_padding_size* specifying the total length of the counter:  
-
-**example counter**
-
-```js
-var mongoose = require('mongoose'),
-    slug = require('mongoose-slug-generator'),
-    mongoose.plugin(slug),
-    Schema = mongoose.Schema,
-    schema = new Schema({
-        title: String,
-        subtitle: String,
-        slug: { type: String, slug: ["title", "subtitle"], slug_padding_size: 4,  unique: true }
-});
-
-mongoose.model('Resource').create({
-    title: 'Am I wrong, fallin\' in love with you!',
-    subtitle: "tell me am I wrong, well, fallin' in love with you"
-}) // slug -> 'am-i-wrong-fallin-in-love-with-you'
-
-mongoose.model('Resource').create({
-    title: 'Am I wrong, fallin\' in love with you!',
-    subtitle: "tell me am I wrong, well, fallin' in love with you"
-}) // slug -> 'am-i-wrong-fallin-in-love-with-you-0001'
-
-mongoose.model('Resource').create({
-    title: 'Am I wrong, fallin\' in love with you!',
-    subtitle: "tell me am I wrong, well, fallin' in love with you"
-}) // slug -> 'am-i-wrong-fallin-in-love-with-you-0002'
-```
-
-
-### Choose your own options
-
-You can change any options adding to the plugin
-
-```js
-var mongoose = require('mongoose'),
-    slug = require('mongoose-slug-generator'),
-    options = {
-        separator: "-",
-        lang: "en",
-        truncate: 120
-    },
-    mongoose.plugin(slug, options),
-    Schema = mongoose.Schema,
-    schema = new Schema({
-        title: String,
-        subtitle: String,
-        slug: { type: String, slug: ["title", "subtitle"], unique: true }
-});
-```
-
-You can find more options in the [speakingURL's npm page](https://www.npmjs.com/package/speakingurl)
 
 ## Support
 
-This plugin is proudly supported by [Kubide](http://kubide.es/)
+This plugin is proudly supported by [Kubide](http://kubide.es/) [hi@kubide.es](mailto:hi@kubide.es)
 
